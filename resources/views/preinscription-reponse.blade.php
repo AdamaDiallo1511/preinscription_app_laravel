@@ -66,15 +66,15 @@
                                             <form class="g-3 row form-submit" id="user-documents">
                                                 <div class="mb-3 col-md-6 ">
                                                     <label for="formFile" class="form-label">Photocopie Carte D'identité Ou Passport</label>
-                                                    <input class="form-control bg-secondary-subtle" type="file" id="formFile" name="passport_pdf_or_img">
+                                                    <input class="form-control bg-secondary-subtle document-file" type="file" id="passport_pdf_or_img" name="passport_pdf_or_img">
                                                 </div>
                                                 <div class="mb-3 col-md-6 ">
                                                     <label for="formFile" class="form-label">Dernier Diplome</label>
-                                                    <input class="form-control bg-secondary-subtle" type="file" id="formFile" name="last_diploma">
+                                                    <input class="form-control bg-secondary-subtle document-file" type="file" id="last_diploma" name="last_diploma">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="formFileMultiple" class="form-label">Deux Derniers Bulletins</label>
-                                                    <input class="form-control bg-secondary-subtle" type="file" id="formFileMultiple" multiple name="two_last_bulletin">
+                                                    <input class="form-control bg-secondary-subtle document-file" type="file" id="two_last_bulletin" multiple name="two_last_bulletin">
                                                 </div>
                                                 <div class="col-12">
                                                         <button type="submit" class="btn btn-primary" id="btn-submit-documents">Enregistrer</button>

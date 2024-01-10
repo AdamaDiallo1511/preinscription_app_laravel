@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class documents extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'filename',
+        'filepath',
+        'user',
+        'created_at'
+    ];
 }

@@ -1,5 +1,3 @@
-import { data, error } from "jquery";
-
 const userID = $('#user-data-information').attr("data-userID")
 export function getData() {
     $('.form-submit').each( function () { 
@@ -22,7 +20,7 @@ export async function validateUserInformation() {
         sex :$('#sex').val(),
         }
         console.log(data)
-       return await submitData(`fill-user-information/${userID}`, data, 'PUT').then(response => console.log(response)).catch(error => console.error(error));
+       return await submitData(`submit-user-information/${userID}`, data, 'PUT').then(response => console.log(response)).catch(error => console.error(error));
       
     })
 }
@@ -33,7 +31,6 @@ export async function submitData(url, data, type) {
             type: type,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                //'Content-Type':'JSON.stringify'
                 'Content-Type':'application/json'
             },
             data: JSON.stringify(data),
@@ -46,12 +43,37 @@ export async function submitData(url, data, type) {
 
 export async function submitFeedback(){
     $('#btn-submit-feedback').on('click', async function() {
-
-    const userID = $('#user-data-information').attr("data-userID")
+    const userID = $('#user-data-information').attr("data-userID");
     const data = {
         feedback:$('#user-feedback').val(),
         create_at : new Date()
     }
     return await submitData(`submit-feedback/${userID}`, data, 'POST').then(response => console.log(response)).catch(error => console.error(error));
 })
+}
+
+export async function submitDocument(){
+    $('#user-documents').on('submit', async function(e){
+        e.preventDefault();
+        const userID = $('#user-data-information').attr("data-userID");
+        let formData = new FormData();
+        formData.append('last_diploma', $('#last_diploma')[0].files[0]);
+        formData.append('passport_pdf_or_img', $('#passport_pdf_or_img')[0].files[0]);
+        formData.append('two_last_bulletin', $('#two_last_bulletin')[0].files[0]);
+        return await $.ajax(`upload-document/${userID}`, {
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
 }

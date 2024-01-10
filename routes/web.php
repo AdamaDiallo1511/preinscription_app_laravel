@@ -24,7 +24,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
 
 
-Route::put('fill-user-information/{user}', function (User $user, App\Http\Requests\UserDataRequest $request) {
+Route::put('submit-user-information/{user}', function (User $user, App\Http\Requests\UserDataRequest $request) {
     $updateSuccess = $user->update($request->validated());
     if ($updateSuccess) {
         return response()->json(['success'=> true]);
@@ -41,3 +41,8 @@ Route::post('submit-feedback/{user}', function (App\Models\feedback $feedback, A
         return response()->json(['success'=> false]);
     }
 });
+// routes/web.php
+
+Route::post('upload-document/{user}', 'App\Http\Controllers\DocumentController@upload');
+
+Route::get('/documents/{user}/download', 'App\Http\Controllers\DocumentController@download');
