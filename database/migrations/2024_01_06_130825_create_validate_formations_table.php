@@ -9,22 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_admin')->default(false);
+        Schema::create('validate_formations', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_admin');
-        });
+        Schema::dropIfExists('validate_formations');
     }
-    
 };

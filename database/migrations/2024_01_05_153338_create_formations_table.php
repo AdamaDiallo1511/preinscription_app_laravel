@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('formations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string("nom_formation");
+            $table->foreignId('departements_id');
+            $table->foreignId('periode_cycles_id')->constrained()->cascadeOnDelete(true);
+            $table->integer("cout_formation")->constrained()->cascadeOnDelete(true);
             $table->timestamps();
-            $table->boolean('is_admin')->nullable();
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('formations');
     }
 };

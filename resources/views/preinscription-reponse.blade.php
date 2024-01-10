@@ -16,48 +16,33 @@
                                     <div class="card">
                                         <div class="card-body row g-2">
                                             <form class="needs-validation" novalidate>
-                                                <div class="col-md-6">
-                                                    <label for="prenom" class="form-label">Prénom</label>
-                                                    <input type="text" class="form-control" id="prenom" name="surname" required>
-                                                     <div class="valid-feedback">
-                                                        Looks good!
-                                                        </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="nom" class="form-label">Nom</label>
-                                                    <input type="text" class="form-control" id="nom" name="name" required>
-                                                     <div class="valid-feedback">
-                                                    Looks good!
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="pays-de-naissance" class="form-label">Pays de naissance</label>
-                                                    <input type="text" class="form-control" id="pays-de-naissance" name="country" placeholder="" required>
+                                                <div class="col-md-5">
+                                                    <label for="prenom" class="form-label">Surname</label>
+                                                    <input type="text" class="form-control" id="surname" name="surname" required>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <label for="province" class="form-label">Province</label>
-                                                    <input type="text" class="form-control" id="province" name="province"  required>
-                                                    <div class="invalid-feedback">
-                                                        Please provide a province.
-                                                        </div>
+                                                    <label for="prenom" class="form-label">Phone number</label>
+                                                    <input type="text" class="form-control" id="phone_number" name="phone_number" required>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <label for="ville-de-naissance" class="form-label">Ville De Naissance</label>
-                                                    <input type="text" class="form-control" id="ville-de-naissance" name="city_of_birth" required>
-                                                    <div class="invalid-feedback">
-                                                    Please provide a valid city.
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label for="sex" class="form-label">Sexe</label>
                                                     <select id="sex" class="form-select" name="sex" required>
                                                     <option selected>Choose...</option>
                                                     <option value="M">Masculin</option>
                                                     <option value="F">Féminin</option>
                                                     </select>
-                                                     <div class="invalid-feedback">
-                                                        Please select a sex.
-                                                        </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="pays-de-naissance" class="form-label">Country</label>
+                                                    <input type="text" class="form-control" id="country" name="country" placeholder="" required>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <label for="province" class="form-label">Province</label>
+                                                    <input type="text" class="form-control" id="province" name="province"  required>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="ville-de-naissance" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="city_of_birth" name="city_of_birth" required>
                                                 </div>
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-primary" id="btn-submit-personnal-informations">Enregistrer</button>
@@ -240,7 +225,7 @@
                                         <div class="card-body">
                                             <form action="" class="form-submit" id="feedback">
                                                 <div class="form-floating mb-3 w-75">
-                                                    <textarea class="form-control" placeholder="Leave a comment here" name="feedback" id="floatingTextarea" style="height: 100px;" required></textarea>
+                                                    <textarea class="form-control" placeholder="Leave a comment here" name="feedback" id="user-feedback" style="height: 100px;" required></textarea>
                                                     </div>
                                                     <div class="col-12">
                                                                 <button type="submit" class="btn btn-primary" id="btn-submit-feedback"> <i class="bi bi-send"></i> Envoyer</button>
