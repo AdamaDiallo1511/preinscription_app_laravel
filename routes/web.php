@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
-use app\Models\feedback;
+use App\Models\feedback;
+use App\Models\formations;
+use App\Models\validate_formations;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,3 +48,46 @@ Route::post('submit-feedback/{user}', function (App\Models\feedback $feedback, A
 Route::post('upload-document/{user}', 'App\Http\Controllers\DocumentController@upload');
 
 Route::get('/documents/{user}/download', 'App\Http\Controllers\DocumentController@download');
+
+Route::get('get-list-formation/', function () {
+    $records = formations::select(
+        'id',
+        'nom_formation',
+        'cout_formation',
+        DB::raw("
+            (CASE 
+                WHEN periode_cycles_id = 7 THEN 'Licence 1'
+                WHEN periode_cycles_id = 8 THEN 'Licence 2'
+                WHEN periode_cycles_id = 9 THEN 'Licence 3'
+                WHEN periode_cycles_id = 10 THEN 'Master 1'
+                WHEN periode_cycles_id = 11 THEN 'Master 2'
+                WHEN periode_cycles_id = 12 THEN 'Ingenieur'
+            END) AS cycle
+        "),
+        DB::raw("
+            (CASE 
+                WHEN departements_id = 1 THEN 'Genie-Informatique'
+                WHEN departements_id = 2 THEN 'Reseaux & systemes'
+            END) AS departement
+        ")
+    )->orderBy('cycle', 'asc')->orderBy('departement', 'asc')->get();
+    return  response()->json($records, JSON_UNESCAPED_UNICODE);
+});
+
+Route::post('add-formation/{user}/', function (App\Models\validate_formations $validate_formations, App\Http\Requests\ValidateFormationRequest $request) {
+    $formation_validated =  $validate_formations->create($request -> validated());
+    if ($formation_validated) {
+        return response()->json(['success'=> true, 'id' => $formation_validated-> id]);
+    } else {
+        return response()->json(['success'=> false]);
+    }
+});
+
+Route::delete('delete-formation/{user}/{id}', function (App\Models\validate_formations $deleted_validate_formations, $id, $user) {
+    $deleted_success = $deleted_validate_formations->where(['id' => $id], ['user', $user])->delete();
+    if ($deleted_success) {
+        return response()->json(['success'=> true]);
+    } else {
+        return response()->json(['success'=> false]);
+    }
+});

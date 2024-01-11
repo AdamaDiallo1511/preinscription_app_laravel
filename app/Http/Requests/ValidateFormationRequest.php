@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DocumentRequest extends FormRequest
+class ValidateFormationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,9 @@ class DocumentRequest extends FormRequest
     {
         return [
             //
+            'formation' => 'required',
+            'user' => 'required',
+            'created_at' => 'required'
         ];
     }
 }

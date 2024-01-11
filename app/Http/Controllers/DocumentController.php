@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Models\documents; // Assurez-vous que c'est le bon chemin
@@ -18,27 +19,27 @@ class DocumentController extends Controller
     $two_last_bulletin_path = $two_last_bulletin->storeAs('documents', $two_last_bulletin->getClientOriginalName());
 
     // Save file information to the database
-    $document1 = documents::create(
+    $document1 = DB::table('documents')->insert(
         [
-            'filename' => $last_diplome->getClientOriginalName(),
+            'filename' => 'last_diplome',
             'filepath' => $last_diplome_path,
             'user' => $id,
             'created_at' => time()
         ]
     );
 
-    $document2 = documents::create(
+    $document2 = DB::table('documents')->insert(
         [
-            'filename' => $passport_pdf_or_img->getClientOriginalName(),
+            'filename' => 'passport_pdf_or_img',
             'filepath' => $passport_pdf_or_img_path,
             'user' => $id,
             'created_at' => time()
         ]
     );
 
-    $document3 = documents::create(
+    $document3 = DB::table('documents')->insert(
         [
-            'filename' => $two_last_bulletin->getClientOriginalName(),
+            'filename' => 'two_last_bulletin',
             'filepath' => $two_last_bulletin_path,
             'user' => $id,
             'created_at' => time()
@@ -52,10 +53,10 @@ class DocumentController extends Controller
     }
 }
 
-    
 
 
-    public function download($id)
+
+   /* public function download($id)
     {
         $document = documents::findOrFail($id);
         $path = Storage::path($document->filepath);
@@ -64,6 +65,5 @@ class DocumentController extends Controller
             'Content-Disposition' => 'attachment; filename="' . $document->filename . '"',
         ];
         return response()->download($path, $document->filename, $headers);
-    }
+    } */
 }
- 

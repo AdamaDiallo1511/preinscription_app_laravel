@@ -100,7 +100,7 @@
                                         <div class="card-body">
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                            Ajouter Une Formation
+                                            <span><i class="bi bi-plus-lg"></i></span> Ajouter Une Formation
                                             </button>
 
                                             <!-- Modal -->
@@ -133,7 +133,56 @@
                                                                 data-bs-parent="#modalExample"
                                                             >
                                                                 <div class="accordion-body">
-                                                                    <div class="list-group" id="formation-licence">
+                                                                    <div class="accordion accordion-flush" id="accordion-flush-licence">
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-licence-heading-one">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-licence-collapse-one"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-licence-collapse-one"
+                                                                                >
+                                                                                    Genie-Informatique
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-licence-collapse-one"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-licence-heading-one"
+                                                                                data-bs-parent="#accordion-flush-licence"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Genie-Informatique-licence">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-licence-heading-two">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-licence-collapse-two"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-licence-collapse-two"
+                                                                                >
+                                                                                    Reseaux & systemes
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-licence-collapse-two"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-licence-heading-two"
+                                                                                data-bs-parent="#accordion-flush-licence"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Reseaux-systemes-licence">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -151,15 +200,65 @@
                                                                     MASTER
                                                                 </button>
                                                             </h2>
+                                                            
                                                             <div
                                                                 id="modalCollapseTwo"
                                                                 class="accordion-collapse collapse"
                                                                 aria-labelledby="headingModalTwo"
                                                                 data-bs-parent="#modalExample"
                                                             >
-                                                                <div class="accordion-body">
-                                                                    <div class="list-group" id="formation-master">
+                                                                <div class="accordion-body list-group">
+                                                                    <div class="accordion accordion-flush" id="accordion-flush-master">
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-master-heading-one">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-master-collapse-one"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-master-collapse-one"
+                                                                                >
+                                                                                    Genie-Informatique
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-master-collapse-one"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-master-heading-one"
+                                                                                data-bs-parent="#accordion-flush-master"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Genie-Informatique-master">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-master-heading-two">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-master-collapse-two"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-master-collapse-two"
+                                                                                >
+                                                                                    Reseaux & systemes
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-master-collapse-two"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-master-heading-two"
+                                                                                data-bs-parent="#accordion-flush-master"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Reseaux-systemes-master">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -172,8 +271,57 @@
                                                             </h2>
                                                             <div id="modalCollapseThree" class="accordion-collapse collapse" aria-labelledby="headingModalThree"
                                                                 data-bs-parent="#modalExample">
-                                                                <div class="accordion-body">
-                                                                    <div class="list-group" id="formation-ingenieur">
+                                                                <div class="accordion-body list-group">
+                                                                    <div class="accordion accordion-flush" id="accordion-flush-ingenieur">
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-ingenieur-heading-one">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-ingenieur-collapse-one"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-ingenieur-collapse-one"
+                                                                                >
+                                                                                    Genie-Informatique
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-ingenieur-collapse-one"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-ingenieur-heading-one"
+                                                                                data-bs-parent="#accordion-flush-ingenieur"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Genie-Informatique-ingenieur">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header" id="flush-ingenieur-heading-two">
+                                                                                <button
+                                                                                    class="accordion-button collapsed"
+                                                                                    type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#flush-ingenieur-collapse-two"
+                                                                                    aria-expanded="true"
+                                                                                    aria-controls="flush-ingenieur-collapse-two"
+                                                                                >
+                                                                                    Reseaux & systemes
+                                                                                </button>
+                                                                            </h2>
+                                                                            <div
+                                                                                id="flush-ingenieur-collapse-two"
+                                                                                class="accordion-collapse collapse"
+                                                                                aria-labelledby="flush-ingenieur-heading-two"
+                                                                                data-bs-parent="#accordion-flush-ingenieur"
+                                                                            >
+                                                                                <div class="accordion-body list-group" id="accordion-Reseaux-systemes-ingenieur">
+                                                                                   
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -195,15 +343,23 @@
                                                         <th scope="col">Cycle</th>
                                                         <th scope="col">Département</th>
                                                         <th scope="col">Prix</th>
+                                                        <th scope="col"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="table-body-formation-selected">
                                                     <tr>
                                                         <th scope="row">1</th>
                                                         <td>Informatique Appliquée</td>
                                                         <td>LICENCE 1</td>
                                                         <td>Génie Logiciel</td>
                                                         <td>850000</td>
+                                                        <td><button
+                                                            type="button"
+                                                            class="btn btn-outline-danger"
+                                                        >
+                                                        <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                                 </table>
@@ -237,7 +393,7 @@
                         </div>
                 </div>
             </div>
-            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled> Candidatez</button></div>
+            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled> <span><i class="bi bi-check2"></i></span> Candidatez</button></div>
         </form>
         </div>
         </div>
