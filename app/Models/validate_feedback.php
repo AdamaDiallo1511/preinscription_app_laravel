@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class validate_feedback extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user',
+        'create_at',
+        'validate_feedback',
+    ];
 }

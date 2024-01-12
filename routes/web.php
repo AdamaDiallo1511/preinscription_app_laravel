@@ -75,19 +75,21 @@ Route::get('get-list-formation/', function () {
 });
 
 Route::post('add-formation/{user}/', function (App\Models\validate_formations $validate_formations, App\Http\Requests\ValidateFormationRequest $request) {
-    $formation_validated =  $validate_formations->create($request -> validated());
+    $validate_formations->fill($request->validated());
+    $formation_validated =  $validate_formations->save();
     if ($formation_validated) {
-        return response()->json(['success'=> true, 'id' => $formation_validated-> id]);
+        return response()->json(['success'=> true, 'id' => $validate_formations->id]);
     } else {
         return response()->json(['success'=> false]);
     }
 });
 
-Route::delete('delete-formation/{user}/{id}', function (App\Models\validate_formations $deleted_validate_formations, $id, $user) {
-    $deleted_success = $deleted_validate_formations->where(['id' => $id], ['user', $user])->delete();
+Route::delete('delete-formation/{id}/', function (App\Models\validate_formations $deleted_validate_formations, $id) {
+    $deleted_success = $deleted_validate_formations->where('id', $id)->delete();
     if ($deleted_success) {
         return response()->json(['success'=> true]);
     } else {
         return response()->json(['success'=> false]);
     }
 });
+

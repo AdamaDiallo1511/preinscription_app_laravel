@@ -184,6 +184,7 @@ export async function displaySelectedFormation() {
                 created_at: new Date(),
             }
             submitData(`add-formation/${userID}/`, data, 'POST').then(async function (response) {
+                console.log(response);
                 console.log(response.id);
                 console.log($(`#formation-${formationID}`).attr('data-formationID'));
                 $(`#formation-${formationID}`).addClass('disabled');
@@ -192,7 +193,7 @@ export async function displaySelectedFormation() {
                 $(`#delete-formation-selected-${formationID}`).on('click', async function () {
                     console.log('deleted');
                     const candidatureID= $(`#delete-formation-selected-${formationID}`).attr('data-candidatureID');
-                    await $.ajax(`delete-formation/${userID}/${response.id}`, {
+                    await $.ajax(`delete-formation/${candidatureID}/`, {
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

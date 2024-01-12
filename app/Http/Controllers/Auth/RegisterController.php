@@ -8,6 +8,11 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\candidatez_preinscription;
+use App\Models\validate_users_informations;
+use App\Models\validate_feedback;
+use App\Models\validate_documents;
+
 
 class RegisterController extends Controller
 {
@@ -64,10 +69,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        candidatez_preinscription::create(['user'=>$user->id,
+                                        'created_at' => time(),
+        ]);
+            validate_users_informations::create(['user'=>$user->id,
+                                        'created_at' => time(),
+        ]);
+            validate_feedback::create(['user'=>$user->id,
+                                        'created_at' => time(),
+        ]);
+            validate_documents::create(['user'=>$user->id,
+                                        'created_at' => time(),
+        ]);
+        return $user;
     }
 }
