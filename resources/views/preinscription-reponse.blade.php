@@ -27,10 +27,13 @@
                                                 <div class="col-md-2">
                                                     <label for="sex" class="form-label">Sexe</label>
                                                     <select id="sex" class="form-select" name="sex" required>
-                                                    <option selected>Choose...</option>
+                                                    <option selected disabled>Choose...</option>
                                                     <option value="M">Masculin</option>
                                                     <option value="F">Féminin</option>
                                                     </select>
+                                                    <div class="invalid-feedback">
+                                                        Please select a valid sex.
+                                                      </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="pays-de-naissance" class="form-label">Country</label>
@@ -53,7 +56,7 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="accordion-item">
+                            <div class="accordion-item" id='document-accordion'>
                                 <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                     Documents
@@ -393,7 +396,7 @@
                         </div>
                 </div>
             </div>
-            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled> <span><i class="bi bi-check2"></i></span> Candidatez</button></div>
+            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled> <span><i class="bi bi-check2 icon-small"></i></span> <span class="fs-3">Candidater</span></button></div>
         </form>
         </div>
         </div>

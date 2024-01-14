@@ -5,13 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class feedback extends Model
+class preinscription extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'feedback',
-        'user',
-        'created_at'
-    ];
 }

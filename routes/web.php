@@ -93,3 +93,27 @@ Route::delete('delete-formation/{id}/', function (App\Models\validate_formations
     }
 });
 
+Route::get('user-submission-detail/{user}', function ($user) {
+    $validate_users_informations = App\Models\validate_users_informations::select('validate_users_information')->where('user', $user)->distinct()->get();
+    $formations_selected = App\Models\validate_formations::select('formation')->where('user', $user)->distinct()->get();
+    $validate_users_documents = App\Models\validate_documents::select('document')->where('user', $user)->distinct()->get();
+    $validate_feedback = App\Models\validate_feedback::select('validate_feedback')->where('user', $user)->distinct()->get();
+    $candidatez_preinscriptions = App\Models\candidatez_preinscription::select('candidated')->where('user', $user)->distinct()->get();
+    $user_information = App\Models\User::select('name', 
+                                                'surname',
+                                                'country',
+                                                'province',
+                                                'city_of_birth',
+                                                'sex')->get();
+    $feedback = App\Models\feedback::select('feedback')->where('user', $user)->distinct()->get();
+    return  response()->json([
+        'validate_users_informations' => $validate_users_informations[0],
+        'validate_users_documents' => $validate_users_documents[0],
+        'validate_feedback' => $validate_feedback[0],
+        'candidatez_preinscriptions' => $candidatez_preinscriptions[0],
+        'user_information' => $user_information[0],
+        'feedback' => $feedback[0],
+        'formations_selected' => $formations_selected
+    ], 200);
+});
+

@@ -24,7 +24,7 @@ class DocumentController extends Controller
             'filename' => 'last_diplome',
             'filepath' => $last_diplome_path,
             'user' => $id,
-            'created_at' => time()
+            'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
 
@@ -33,7 +33,7 @@ class DocumentController extends Controller
             'filename' => 'passport_pdf_or_img',
             'filepath' => $passport_pdf_or_img_path,
             'user' => $id,
-            'created_at' => time()
+            'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
 
@@ -42,7 +42,7 @@ class DocumentController extends Controller
             'filename' => 'two_last_bulletin',
             'filepath' => $two_last_bulletin_path,
             'user' => $id,
-            'created_at' => time()
+            'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
 

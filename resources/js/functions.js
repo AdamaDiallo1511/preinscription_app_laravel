@@ -1,28 +1,35 @@
-const userID = $('#user-data-information').attr("data-userID")
-export function getData() {
+'use strict';
+import { increment, decrement } from './create-slice';
+import { selectCount, store } from './store';
+import { fetchData, submittedUserData, userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount } from './btn-slice';
+
+//initialisation des variables
+
+export let counter = selectCount(store.getState());
+/*export let userSubmission = store.getState().btn.userDetailSubmission;
+export let feedbackSubmission = store.getState().btn.feedbackSubmission;
+export let documentSubmission = store.getState().btn.documentSubmission;
+export let submitted = store.getState().btn.submitted;
+*/
+//////////////////////////////////////////////////////////////////////////////////////// Store ///////////////////////////////////////////////////////////////////////////////////////////////////////
+store.subscribe(() => {
+    console.log(store.getState());
+}); 
+
+await fetchData(6);
+store.dispatch(await formationSelectedcount());
+////////////////////////////////////////////////////////////////////////////////////// Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
+export async function getData() {
+
+    //disables default form submit action
     $('.form-submit').each( function () { 
         $(this).on('submit', function (e) {
             e.preventDefault();
         });
     });
-    
-}
-
-export async function validateUserInformation() {
-    const userID = $('#user-data-information').attr("data-userID")
-    $('#btn-submit-personnal-informations').on('click', async function() {
-       const data = {
-        surname:$('#surname').val(),
-        phone_number:$('#phone_number').val(),
-        country:$('#country').val(),
-        province:$('#province').val(),
-        city_of_birth:$('#city_of_birth').val(),
-        sex :$('#sex').val(),
-        }
-        console.log(data)
-       return await submitData(`submit-user-information/${userID}`, data, 'PUT').then(response => console.log(response)).catch(error => console.error(error));
-      
-    })
+    validateUserInformation();
+    submitFeedback();
+    submitDocument();
 }
 
 export async function submitData(url, data, type) {
@@ -41,17 +48,72 @@ export async function submitData(url, data, type) {
     } 
 }
 
+
+////////////////////////////////////////////////////////// function pour envoyer les informations de l utilisqteur
+export async function validateUserInformation() {
+    const userID = $('#user-data-information').attr("data-userID")
+    $('#btn-submit-personnal-informations').on('click', async function() {
+       const data = {
+        surname:$('#surname').val(),
+        phone_number:$('#phone_number').val(),
+        country:$('#country').val(),
+        province:$('#province').val(),
+        city_of_birth:$('#city_of_birth').val(),
+        sex :$('#sex').val(),
+        }
+        console.log(data)
+       return await submitData(`submit-user-information/${userID}`, data, 'PUT').then(response => {
+        console.log(response);
+        if (response.success) {
+            store.dispatch(userDetailSubmission());
+            disableUserInformationForm();
+        } else {
+            throw new Error('Failed to submit user information');
+        }
+    }).catch(error => console.error(error));
+      
+    })
+}
+
+const disableUserInformationForm = () => {
+$('#surname').attr('disabled', 'disabled');
+$('#phone_number').attr('disabled', 'disabled');
+$('#country').attr('disabled', 'disabled');
+$('#province').attr('disabled', 'disabled');
+$('#city_of_birth').attr('disabled', 'disabled');
+$('#sex').attr('disabled', 'disabled');    
+$('#btn-submit-personnal-informations').attr('disabled', 'disabled');    
+}
+
+//////////////////////////////////////////////////////////////////////////// function pour soumettre les feedbacks
 export async function submitFeedback(){
     $('#btn-submit-feedback').on('click', async function() {
     const userID = $('#user-data-information').attr("data-userID");
     const data = {
         feedback:$('#user-feedback').val(),
+        user : userID,
         create_at : new Date()
     }
-    return await submitData(`submit-feedback/${userID}`, data, 'POST').then(response => console.log(response)).catch(error => console.error(error));
+    return await submitData(`submit-feedback/${userID}`, data, 'POST')
+    .then(response => {
+        console.log(response)
+        if (response.success) {
+            store.dispatch(feedbackSubmission());
+            disableFeedbackForm();
+        } else {
+            throw new Error('Failed to submit feedback');
+        }
+    })
+    .catch(error => console.error(error));
 })
 }
 
+const disableFeedbackForm = () => {
+    $('#user-feedback').attr('disabled', 'disabled');
+    $('#btn-submit-feedback').attr('disabled', 'disabled');
+}
+
+//////////////////////////////////////////////////////////////////////////// function pour soumettre les documents
 export async function submitDocument(){
     $('#user-documents').on('submit', async function(e){
         e.preventDefault();
@@ -70,6 +132,12 @@ export async function submitDocument(){
             contentType: false,
             success: function(response) {
                 console.log(response);
+                if (response.success) {
+                    store.dispatch(documentSubmission());
+                    disabledDocumentAccordion();
+                } else {
+                    throw new Error('Failed to submit documents');
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -78,8 +146,12 @@ export async function submitDocument(){
     });
 }
 
+const disabledDocumentAccordion = () => {
+    return $('#document-accordion').addClass('d-none');
+}
 
-//affichage des formations proposees par l institut
+
+//////////////////////////////////////////////////////////////////////////affichage des formations proposees par l institut
 export async function getFormationList(){
     try {
         const response = $.ajax(`get-list-formation/`,{
@@ -173,7 +245,6 @@ async function deleteFormationAdded(formationID) {
 }
 export async function displaySelectedFormation() {
     $('a').filter('.formation-list-group').each(function () {
-        console.log($(this));
         $(this).on('click', async function (e) {
             e.preventDefault();
             const formationID = $(this).attr("data-formationid");
@@ -184,9 +255,8 @@ export async function displaySelectedFormation() {
                 created_at: new Date(),
             }
             submitData(`add-formation/${userID}/`, data, 'POST').then(async function (response) {
-                console.log(response);
-                console.log(response.id);
-                console.log($(`#formation-${formationID}`).attr('data-formationID'));
+                store.dispatch(increment());
+                store.dispatch(formationSelected(formationID))
                 $(`#formation-${formationID}`).addClass('disabled');
                 $(`#formation-${formationID}`).attr('aria-disabled', true);
                 await appendFormationIntoTable($(`#formation-${formationID}`), response.id); 
@@ -200,6 +270,7 @@ export async function displaySelectedFormation() {
                         },
                         success: function (response) {
                             console.log(response);
+                            store.dispatch(decrement());
                             $(`#formation-${formationID}`).removeClass('disabled');
                             $(`#formation-${formationID}`).removeAttr('aria-disabled');
                             $(`#candidature-id-${candidatureID}`).remove();

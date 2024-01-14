@@ -23,6 +23,7 @@ class FeedBackRequest extends FormRequest
     {
         return [
             'feedback' => 'required',
+            'user' => 'required',
             'created_at' => 'require'
 
         ];
