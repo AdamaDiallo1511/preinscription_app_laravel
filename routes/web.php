@@ -95,7 +95,7 @@ Route::delete('delete-formation/{id}/', function (App\Models\validate_formations
 
 Route::get('user-submission-detail/{user}', function ($user) {
     $validate_users_informations = App\Models\validate_users_informations::select('validate_users_information')->where('user', $user)->distinct()->get();
-    $formations_selected = App\Models\validate_formations::select('formation')->where('user', $user)->distinct()->get();
+    $formations_selected = App\Models\validate_formations::select('id as candidatureID' ,'formation as formation_id')->where('user', $user)->distinct()->get();
     $validate_users_documents = App\Models\validate_documents::select('document')->where('user', $user)->distinct()->get();
     $validate_feedback = App\Models\validate_feedback::select('validate_feedback')->where('user', $user)->distinct()->get();
     $candidatez_preinscriptions = App\Models\candidatez_preinscription::select('candidated')->where('user', $user)->distinct()->get();

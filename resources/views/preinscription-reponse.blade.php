@@ -102,8 +102,8 @@
                                         </div>
                                         <div class="card-body">
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                            <span><i class="bi bi-plus-lg"></i></span> Ajouter Une Formation
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="add-formation-button">
+                                            <span><i class="bi bi-plus-lg"></i></span> <span>Ajouter Une Formation</span>
                                             </button>
 
                                             <!-- Modal -->
@@ -350,20 +350,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table-body-formation-selected">
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                        <td>Informatique Appliquée</td>
-                                                        <td>LICENCE 1</td>
-                                                        <td>Génie Logiciel</td>
-                                                        <td>850000</td>
-                                                        <td><button
-                                                            type="button"
-                                                            class="btn btn-outline-danger"
-                                                        >
-                                                        <i class="bi bi-trash3"></i>
-                                                        </button>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
                                                 </table>
                                         </div>
@@ -396,7 +382,7 @@
                         </div>
                 </div>
             </div>
-            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled> <span><i class="bi bi-check2 icon-small"></i></span> <span class="fs-3">Candidater</span></button></div>
+            <div class="d-grid gap-2 mt-3"><button type="button" name="" id="candidate" class="btn btn-primary" disabled>  <span class="fs-3">Candidater</span> <span><i class="bi bi-check2 icon-small"></i></span></button></div>
         </form>
         </div>
         </div>

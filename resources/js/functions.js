@@ -1,11 +1,9 @@
 'use strict';
 import { increment, decrement } from './create-slice';
 import { selectCount, store } from './store';
-import { fetchData, submittedUserData, userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount } from './btn-slice';
+import { fetchData, submittedUserData, userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount, listFormationsSelected } from './btn-slice';
 
-//initialisation des variables
 
-export let counter = selectCount(store.getState());
 /*export let userSubmission = store.getState().btn.userDetailSubmission;
 export let feedbackSubmission = store.getState().btn.feedbackSubmission;
 export let documentSubmission = store.getState().btn.documentSubmission;
@@ -18,8 +16,17 @@ store.subscribe(() => {
 
 await fetchData(6);
 store.dispatch(await formationSelectedcount());
+console.log(listFormationsSelected())
+//initialisation des variables
+const counter = () =>  selectCount(store.getState());
+console.log(counter());
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////// Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
 export async function getData() {
+    const counter = () => selectCount(store.getState());
+    const formationCandidaureID = listFormationsSelected()
 
     //disables default form submit action
     $('.form-submit').each( function () { 
@@ -30,6 +37,8 @@ export async function getData() {
     validateUserInformation();
     submitFeedback();
     submitDocument();
+    ( async function(){return counter() > 0 ? await ablesAddingFormationIntoTable(formationCandidaureID) : ''})();
+    (function(){return counter() >= 5 ? disablesAddingFormationButton() : ''})();
 }
 
 export async function submitData(url, data, type) {
@@ -167,6 +176,9 @@ export async function getFormationList(){
     }
 }
 
+
+
+/////////////////////////////////////////////////////////////////////////////// affichage des formations selectiones
 export async function appendFormation(data) {
     const formationList = data;
     const listLink = (accordionID, formationID, nom_formation, cycle, cout_formation, departement) => {
@@ -197,9 +209,6 @@ export async function appendFormation(data) {
     }
     return await appendFormationListGroup(formationList);
 }
-
-
-// affichage des formations selectiones
 async function appendFormationIntoTable(params, candidatureID) {
     return $('#table-body-formation-selected').append(
         `<tr class='formation-selected-list-table-row' id="candidature-id-${candidatureID}" data-candidatureID="${candidatureID}">
@@ -221,29 +230,58 @@ async function appendFormationIntoTable(params, candidatureID) {
     )
 }
 
-async function deleteFormationAdded(formationID) {
-    const userID = $('#user-data-information').attr("data-userID");
-     $(`#delete-formation-selected-${formationID}`).on('click', async function () {
-        console.log('deleted');
-        const candidatureID = $(params).attr('data-candidatureID');
-        return await $.ajax(`delete-formation/${userID}/${candidatureID}`, {
+async function deleteFormationAdded(formationID, candidatureID) {
+        return await $.ajax(`delete-formation/${candidatureID}`, {
             type: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
                 console.log(response);
+                store.dispatch(decrement());
                 $(`#formation-${formationID}`).removeClass('disabled');
                 $(`#formation-${formationID}`).removeAttr('aria-disabled');
                 $(`#candidature-id-${candidatureID}`).remove();
+                !(counter > 5 || counter == 5) ? ablesAddingFormationButton() : '';
             },
             error: function (error, jqXHR, textStatus, errorThrown) {
                 console.error(error,textStatus, errorThrown);
             }
         })
+}
+//////////////////////////////////////////////////////////////////////// Append the selected formation to the table
+async function ablesAddingFormationIntoTable(formationCandidaureID) {
+    const counter = () => selectCount(store.getState());
+    return formationCandidaureID.forEach( async function (el){
+        $(`#formation-${el.id}`).addClass('disabled');
+        $(`#formation-${el.id}`).attr('aria-disabled', true);
+        counter > 5 || counter == 5 ? disablesAddingFormationButton() : '';
+        $('#table-body-formation-selected').append(
+            `<tr class='formation-selected-list-table-row' id="candidature-id-${el.candidatureID}" data-candidatureID="${el.candidatureID}">
+                                                        <th scope="row">${el.id}</th>
+                                                        <td>${el.nom_formation}</td>
+                                                        <td>${el.cycle}</td>
+                                                        <td>${el.departement}</td>
+                                                        <td>${el.cout_formation}</td>
+                                                        <td>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-outline-danger"
+                                                            id="delete-formation-selected-${el.id}"
+                                                            data-candidatureID="${el.candidatureID}">
+                                                        <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                        </td>
+                                                    </tr>` )
+            $(`#candidature-id-${el.candidatureID}`).on('click', 'button[id^="delete-formation-selected-"]', async function () {
+                let elId = $(this).data('candidatureid');
+                console.log('deleted');
+                await deleteFormationAdded(elId, el.candidatureID);
+            });           
     })
 }
 export async function displaySelectedFormation() {
+    const counter = () => selectCount(store.getState());
     $('a').filter('.formation-list-group').each(function () {
         $(this).on('click', async function (e) {
             e.preventDefault();
@@ -254,35 +292,32 @@ export async function displaySelectedFormation() {
                 formation: formationID,
                 created_at: new Date(),
             }
-            submitData(`add-formation/${userID}/`, data, 'POST').then(async function (response) {
+             submitData(`add-formation/${userID}/`, data, 'POST').then(async function (response) {
                 store.dispatch(increment());
                 store.dispatch(formationSelected(formationID))
                 $(`#formation-${formationID}`).addClass('disabled');
                 $(`#formation-${formationID}`).attr('aria-disabled', true);
+                counter > 5 || counter == 5 ? disablesAddingFormationButton() : '';
                 await appendFormationIntoTable($(`#formation-${formationID}`), response.id); 
                 $(`#delete-formation-selected-${formationID}`).on('click', async function () {
                     console.log('deleted');
                     const candidatureID= $(`#delete-formation-selected-${formationID}`).attr('data-candidatureID');
-                    await $.ajax(`delete-formation/${candidatureID}/`, {
-                        type: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            store.dispatch(decrement());
-                            $(`#formation-${formationID}`).removeClass('disabled');
-                            $(`#formation-${formationID}`).removeAttr('aria-disabled');
-                            $(`#candidature-id-${candidatureID}`).remove();
-                        },
-                        error: function (error, jqXHR, textStatus, errorThrown) {
-                            console.error(error,textStatus, errorThrown);
-                        }
-                    })
+                     await deleteFormationAdded(formationID, candidatureID);
                 })             
-            })
+            }
+            )
             
         })
     })
 
+}
+
+
+/////////////////////////////////////////////////////////// Disable adding formation button
+
+const disablesAddingFormationButton = () => {
+    return $('#add-formation-button').attr('disabled', 'disabled');
+}
+const ablesAddingFormationButton = () => {
+    return $('#add-formation-button').prop('disabled') != undefined ? $('#add-formation-button').removeAttr('disabled') : '';
 }
