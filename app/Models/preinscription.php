@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class preinscription extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'formation',
+        'document',
+        'user',
+        'created_at',
+    ];
 }

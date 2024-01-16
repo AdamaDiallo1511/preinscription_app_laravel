@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
-use App\Models\documents; // Assurez-vous que c'est le bon chemin
+use App\Models\documents;
+use App\Models\validate_documents;
+ // Assurez-vous que c'est le bon chemin
 
 class DocumentController extends Controller
 {
@@ -19,7 +21,7 @@ class DocumentController extends Controller
     $two_last_bulletin_path = $two_last_bulletin->storeAs('documents', $two_last_bulletin->getClientOriginalName());
 
     // Save file information to the database
-    $document1 = DB::table('documents')->insert(
+    $document1 = DB::table('documents')->insertGetId(
         [
             'filename' => 'last_diplome',
             'filepath' => $last_diplome_path,
@@ -27,8 +29,8 @@ class DocumentController extends Controller
             'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
-
-    $document2 = DB::table('documents')->insert(
+    
+    $document2 = DB::table('documents')->insertGetId(
         [
             'filename' => 'passport_pdf_or_img',
             'filepath' => $passport_pdf_or_img_path,
@@ -36,8 +38,8 @@ class DocumentController extends Controller
             'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
-
-    $document3 = DB::table('documents')->insert(
+    
+    $document3 = DB::table('documents')->insertGetId(
         [
             'filename' => 'two_last_bulletin',
             'filepath' => $two_last_bulletin_path,
@@ -45,12 +47,14 @@ class DocumentController extends Controller
             'created_at' => date('Y-m-d H:i:s', time())
         ]
     );
-
+    
     if ($document1 && $document2 && $document3) {
-        return response()->json(['success'=> true]);
+        validate_documents::where('user', $id)->update(['document' => 1]);
+        return response()->json(['success'=> true, 'document_id' => [$document1, $document2, $document3]]);
     } else {
         return response()->json(['success'=> false]);
     }
+    
 }
 
 

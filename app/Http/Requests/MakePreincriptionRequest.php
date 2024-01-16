@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FeedBackRequest extends FormRequest
+class MakePreincriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,10 @@ class FeedBackRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'feedback' => 'required',
+            'formation' => 'required',
+            'document' => 'required',
             'user' => 'required',
             'created_at' => 'required'
-
         ];
     }
 }

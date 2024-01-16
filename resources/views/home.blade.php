@@ -29,3 +29,12 @@
     </div>
 </div>
 @endsection
+
+@section('navbar')
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#" id="se-preinscrire-nav">Se preinscrire</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="admission-nav">Admission</a>
+  </li>
+@endsection

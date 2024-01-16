@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class statut_preinscription extends Model
 {
     use HasFactory;
+    protected $fillable = ['statut', 'preinscription'];
 }

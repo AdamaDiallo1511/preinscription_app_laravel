@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container d-none" id="preinscription-candidature-section">
     <div class="card">
         <div class="card-header fs-4"> Demande De Préinscription</div>
         <div class="card-body">
@@ -388,6 +388,24 @@
         </div>
     </div>
 </section>
-<section class="d-none container">
-     
+
+<section class="container d-none" id="preinscription-response-section">
+     <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nom Formation</th>
+                    <th scope="col">Cycle</th>
+                    <th scope="col">Département</th>
+                    <th scope="col">Prix</th>
+                    <th scope="col">Statut</th>
+                </tr>
+            </thead>
+            <tbody id="response-row-table">
+              
+            </tbody>
+          </table>
+     </div>
 </section>
+

@@ -1,7 +1,7 @@
 'use strict';
 import { increment, decrement } from './create-slice';
 import { selectCount, store } from './store';
-import { fetchData, submittedUserData, userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount, listFormationsSelected } from './btn-slice';
+import { fetchData, btnClicked,document_id,userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount, listFormationsSelected, ableBtnCandidate,submitPreinscription, appendResponseCandidature } from './btn-slice';
 
 
 /*export let userSubmission = store.getState().btn.userDetailSubmission;
@@ -14,31 +14,38 @@ store.subscribe(() => {
     console.log(store.getState());
 }); 
 
-await fetchData(6);
-store.dispatch(await formationSelectedcount());
-console.log(listFormationsSelected())
+
 //initialisation des variables
-const counter = () =>  selectCount(store.getState());
-console.log(counter());
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////// Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
 export async function getData() {
-    const counter = () => selectCount(store.getState());
-    const formationCandidaureID = listFormationsSelected()
-
-    //disables default form submit action
-    $('.form-submit').each( function () { 
-        $(this).on('submit', function (e) {
-            e.preventDefault();
+    const userID = $('#user-data-information').attr("data-userID")
+    await fetchData(userID);
+    store.dispatch(await formationSelectedcount());
+    const candidated = store.getState().btn.submitted
+    if (candidated) {
+        displayResponsePage();
+        appendResponseCandidature()
+    } else {
+        $('#preinscription-candidature-section').removeClass('d-none');
+        spinner(false);
+        const counter = () => selectCount(store.getState());
+        const formationCandidaureID = listFormationsSelected()
+        btnClicked()
+        //disables default form submit action
+        $('.form-submit').each( function () { 
+            $(this).on('submit', function (e) {
+                e.preventDefault();
+            });
         });
-    });
-    validateUserInformation();
-    submitFeedback();
-    submitDocument();
-    ( async function(){return counter() > 0 ? await ablesAddingFormationIntoTable(formationCandidaureID) : ''})();
-    (function(){return counter() >= 5 ? disablesAddingFormationButton() : ''})();
+        validateUserInformation();
+        submitFeedback();
+        submitDocument();
+        submitPreinscriptionCandidated();
+        ( async function(){return selectCount(store.getState()) > 0 ? await ablesAddingFormationIntoTable(formationCandidaureID) : ''})();
+        (function(){return selectCount(store.getState()) >= 5 ? disablesAddingFormationButton() : ''})();
+        candidateBtn();
+    }
 }
 
 export async function submitData(url, data, type) {
@@ -76,6 +83,7 @@ export async function validateUserInformation() {
         if (response.success) {
             store.dispatch(userDetailSubmission());
             disableUserInformationForm();
+            candidateBtn();
         } else {
             throw new Error('Failed to submit user information');
         }
@@ -84,7 +92,7 @@ export async function validateUserInformation() {
     })
 }
 
-const disableUserInformationForm = () => {
+export function disableUserInformationForm() {
 $('#surname').attr('disabled', 'disabled');
 $('#phone_number').attr('disabled', 'disabled');
 $('#country').attr('disabled', 'disabled');
@@ -101,7 +109,7 @@ export async function submitFeedback(){
     const data = {
         feedback:$('#user-feedback').val(),
         user : userID,
-        create_at : new Date()
+        created_at : new Date()
     }
     return await submitData(`submit-feedback/${userID}`, data, 'POST')
     .then(response => {
@@ -109,6 +117,7 @@ export async function submitFeedback(){
         if (response.success) {
             store.dispatch(feedbackSubmission());
             disableFeedbackForm();
+            candidateBtn();
         } else {
             throw new Error('Failed to submit feedback');
         }
@@ -117,7 +126,7 @@ export async function submitFeedback(){
 })
 }
 
-const disableFeedbackForm = () => {
+export function disableFeedbackForm(){
     $('#user-feedback').attr('disabled', 'disabled');
     $('#btn-submit-feedback').attr('disabled', 'disabled');
 }
@@ -143,7 +152,9 @@ export async function submitDocument(){
                 console.log(response);
                 if (response.success) {
                     store.dispatch(documentSubmission());
+                    store.dispatch(document_id(response.document_id))
                     disabledDocumentAccordion();
+                    candidateBtn();
                 } else {
                     throw new Error('Failed to submit documents');
                 }
@@ -211,7 +222,7 @@ export async function appendFormation(data) {
 }
 async function appendFormationIntoTable(params, candidatureID) {
     return $('#table-body-formation-selected').append(
-        `<tr class='formation-selected-list-table-row' id="candidature-id-${candidatureID}" data-candidatureID="${candidatureID}">
+        `<tr class='formation-selected-list-table-row' id="candidature-id-${candidatureID}" data-candidatureID="${candidatureID} data-formationID="${params.attr('data-formationID')}">
                                                     <th scope="row">${params.attr('data-formationID')}</th>
                                                     <td>${params.attr('data-cycle')}</td>
                                                     <td>${params.attr('data-nomFormation')}</td>
@@ -242,7 +253,8 @@ async function deleteFormationAdded(formationID, candidatureID) {
                 $(`#formation-${formationID}`).removeClass('disabled');
                 $(`#formation-${formationID}`).removeAttr('aria-disabled');
                 $(`#candidature-id-${candidatureID}`).remove();
-                !(counter > 5 || counter == 5) ? ablesAddingFormationButton() : '';
+                !(selectCount(store.getState()) > 5 || selectCount(store.getState()) == 5) ? ablesAddingFormationButton() : '';
+                candidateBtn();
             },
             error: function (error, jqXHR, textStatus, errorThrown) {
                 console.error(error,textStatus, errorThrown);
@@ -251,13 +263,12 @@ async function deleteFormationAdded(formationID, candidatureID) {
 }
 //////////////////////////////////////////////////////////////////////// Append the selected formation to the table
 async function ablesAddingFormationIntoTable(formationCandidaureID) {
-    const counter = () => selectCount(store.getState());
     return formationCandidaureID.forEach( async function (el){
         $(`#formation-${el.id}`).addClass('disabled');
         $(`#formation-${el.id}`).attr('aria-disabled', true);
-        counter > 5 || counter == 5 ? disablesAddingFormationButton() : '';
+        selectCount(store.getState()) > 5 || selectCount(store.getState()) == 5 ? disablesAddingFormationButton() : '';
         $('#table-body-formation-selected').append(
-            `<tr class='formation-selected-list-table-row' id="candidature-id-${el.candidatureID}" data-candidatureID="${el.candidatureID}">
+            `<tr class='formation-selected-list-table-row' id="candidature-id-${el.candidatureID}" data-candidatureID="${el.candidatureID}" data-formationID="${el.id}">
                                                         <th scope="row">${el.id}</th>
                                                         <td>${el.nom_formation}</td>
                                                         <td>${el.cycle}</td>
@@ -276,12 +287,11 @@ async function ablesAddingFormationIntoTable(formationCandidaureID) {
             $(`#candidature-id-${el.candidatureID}`).on('click', 'button[id^="delete-formation-selected-"]', async function () {
                 let elId = $(this).data('candidatureid');
                 console.log('deleted');
-                await deleteFormationAdded(elId, el.candidatureID);
+                await deleteFormationAdded(el.id, el.candidatureID);
             });           
     })
 }
 export async function displaySelectedFormation() {
-    const counter = () => selectCount(store.getState());
     $('a').filter('.formation-list-group').each(function () {
         $(this).on('click', async function (e) {
             e.preventDefault();
@@ -297,7 +307,8 @@ export async function displaySelectedFormation() {
                 store.dispatch(formationSelected(formationID))
                 $(`#formation-${formationID}`).addClass('disabled');
                 $(`#formation-${formationID}`).attr('aria-disabled', true);
-                counter > 5 || counter == 5 ? disablesAddingFormationButton() : '';
+                selectCount(store.getState()) > 5 || selectCount(store.getState()) == 5 ? disablesAddingFormationButton() : '';
+                candidateBtn();
                 await appendFormationIntoTable($(`#formation-${formationID}`), response.id); 
                 $(`#delete-formation-selected-${formationID}`).on('click', async function () {
                     console.log('deleted');
@@ -320,4 +331,88 @@ const disablesAddingFormationButton = () => {
 }
 const ablesAddingFormationButton = () => {
     return $('#add-formation-button').prop('disabled') != undefined ? $('#add-formation-button').removeAttr('disabled') : '';
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////Able candidate button 
+function candidateBtn() {
+    const formation_lenght = $('.formation-selected-list-table-row').length + 1
+    const submissions = ableBtnCandidate();
+    console.log(formation_lenght, submissions);
+    return (formation_lenght == 0 &&  $('#candidate').prop('disabled') == undefined ) || (submissions == false &&  $('#candidate').prop('disabled') == undefined ) ? $('#candidate').attr('disabled', 'disabled') : formation_lenght > 0 && submissions ? $('#candidate').removeAttr('disabled') : '';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////submissions of preinscription
+async function submitPreinscriptionCandidated() {
+    return $('#candidate').on('click', async function () {
+        await submitPreinscription().then(
+            function (res) {
+                $('#preinscription-candidature-section').addClass('d-none');
+                spinner(false);
+                displayResponsePage();
+            }
+            )
+        .catch(err => console.log(err))
+    })
+}
+
+const display = (bool) => {
+    const userID = $('#user-data-information').attr("data-userID");
+
+    $('#admission-nav').on('click', function (e) {
+        e.preventDefault();
+        if(!$(this).hasClass('d-none')) {
+            $('#preinscription-response-section').removeClass('d-none');
+            $('#preinscription-candidature-section').addClass('d-none');
+            $('#se-preinscrire-nav').removeClass('active');
+            $(this).addClass('active');
+            bool ? $('#se-preinscrire-nav').addClass('disabled').attr('aria-disabled', true) : '';
+            history.pushState({}, null, `response-candidature/${userID}`);
+        }
+    });
+
+    $('#se-preinscrire-nav').on('click', function (e) {
+        e.preventDefault();
+        if(!$(this).hasClass('d-none')) {
+            $('#preinscription-response-section').addClass('d-none');
+            $('#preinscription-candidature-section').removeClass('d-none');
+            $('#admission-nav').removeClass('active');
+            $(this).addClass('active');
+            history.replaceState({}, null, `home`);
+        }
+    });
+
+    window.addEventListener('popstate', function () {
+        const path = location.pathname;
+        if(path.includes('response-candidature')) {
+            $('#preinscription-response-section').removeClass('d-none');
+            $('#preinscription-candidature-section').addClass('d-none');
+            $('#se-preinscrire-nav').removeClass('active');
+            $('#admission-nav').addClass('active');
+        } else {
+            $('#preinscription-response-section').addClass('d-none');
+            $('#preinscription-candidature-section').removeClass('d-none');
+            $('#admission-nav').removeClass('active');
+            $('#se-preinscrire-nav').addClass('active');
+        }
+    });
+}
+
+const displayResponsePage = () => {
+    const userID = $('#user-data-information').attr("data-userID");
+    $('#preinscription-response-section').removeClass('d-none');
+    !$('#preinscription-candidature-section').hasClass('d-none') ? $('#preinscription-candidature-section').addClass('d-none') : '';
+    $('#se-preinscrire-nav').removeClass('active');
+    $('#admission-nav').addClass('active');
+    $('#se-preinscrire-nav').addClass('disabled').attr('aria-disabled', true);
+    history.pushState({}, null, `response-candidature/${userID}`);
+    spinner(false)
+}
+
+const spinner = (bool) => {
+    if(bool) {
+        $('#spinner').removeClass('d-none');
+    } else {
+        $('#spinner').addClass('d-none');
+    }
 }
