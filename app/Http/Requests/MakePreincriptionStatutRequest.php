@@ -23,8 +23,7 @@ class MakePreincriptionStatutRequest extends FormRequest
     {
         return [
             //
-            'preinscription',
-            'statut'
+            'statut' => 'required'
             ];
     }
 }

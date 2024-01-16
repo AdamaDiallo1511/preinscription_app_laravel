@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -24,7 +25,8 @@ class HomeController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        return view('home', ['userID' => $userId]);
+        $is_admin = User::where('id', $userId)->first();
+        return view('home', ['userID' => $userId, 'is_admin'=> $is_admin->is_admin]);
     }
 
     /**

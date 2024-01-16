@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage; 
 use Illuminate\Http\Request;
 use App\Models\documents;
 use App\Models\validate_documents;
@@ -60,14 +60,25 @@ class DocumentController extends Controller
 
 
 
-   /* public function download($id)
-    {
+public function download($ids)
+{
+    $ids = explode(',', $ids); // Split the IDs
+
+    $zip = new \ZipArchive();
+    $zipName = time() . '.zip';
+    $zip->open($zipName, \ZipArchive::CREATE);
+
+    foreach ($ids as $id) {
         $document = documents::findOrFail($id);
-        $path = Storage::path($document->filepath);
-        $headers = [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Disposition' => 'attachment; filename="' . $document->filename . '"',
-        ];
-        return response()->download($path, $document->filename, $headers);
-    } */
+        $contents = Storage::get($document->filepath); // Get the file's contents
+
+        // Add the file's contents to the zip using the addFromString method
+        $zip->addFromString($document->filename, $contents);
+    }
+
+    $zip->close();
+
+    return response()->download($zipName);
+}
+
 }

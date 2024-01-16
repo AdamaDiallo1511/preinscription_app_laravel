@@ -13,10 +13,8 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('You are logged in!') }}
                     @if(auth()->user()->is_admin == 1)
-                    <a href="{{url('admin/routes')}}">Admin</a>
+                    @include('admin-template')
                     @else
                     <div class=”panel-heading”>Normal User</div>
                     @section('content')
@@ -30,6 +28,7 @@
 </div>
 @endsection
 
+@if(auth()->user()->is_admin == 0)
 @section('navbar')
 <li class="nav-item">
     <a class="nav-link active" aria-current="page" href="#" id="se-preinscrire-nav">Se preinscrire</a>
@@ -38,3 +37,4 @@
     <a class="nav-link" href="#" id="admission-nav">Admission</a>
   </li>
 @endsection
+@endif

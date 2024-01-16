@@ -2,6 +2,7 @@
 import { increment, decrement } from './create-slice';
 import { selectCount, store } from './store';
 import { fetchData, btnClicked,document_id,userDetailSubmission, feedbackSubmission, documentSubmission, formationSelected, formationSelectedcount, listFormationsSelected, ableBtnCandidate,submitPreinscription, appendResponseCandidature } from './btn-slice';
+import { adminData } from './admin-slice';
 
 
 /*export let userSubmission = store.getState().btn.userDetailSubmission;
@@ -20,31 +21,36 @@ store.subscribe(() => {
 ////////////////////////////////////////////////////////////////////////////////////// Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
 export async function getData() {
     const userID = $('#user-data-information').attr("data-userID")
-    await fetchData(userID);
-    store.dispatch(await formationSelectedcount());
-    const candidated = store.getState().btn.submitted
-    if (candidated) {
-        displayResponsePage();
-        appendResponseCandidature()
+    const isAdmin = $('#app').attr("data-isAdmin")
+    if (isAdmin) {
+        adminData()
     } else {
-        $('#preinscription-candidature-section').removeClass('d-none');
-        spinner(false);
-        const counter = () => selectCount(store.getState());
-        const formationCandidaureID = listFormationsSelected()
-        btnClicked()
-        //disables default form submit action
-        $('.form-submit').each( function () { 
-            $(this).on('submit', function (e) {
-                e.preventDefault();
+        await fetchData(userID);
+        store.dispatch(await formationSelectedcount());
+        const candidated = store.getState().btn.submitted
+        if (candidated) {
+            displayResponsePage();
+            appendResponseCandidature()
+        } else {
+            $('#preinscription-candidature-section').removeClass('d-none');
+            spinner(false);
+            const counter = () => selectCount(store.getState());
+            const formationCandidaureID = listFormationsSelected()
+            btnClicked()
+            //disables default form submit action
+            $('.form-submit').each( function () { 
+                $(this).on('submit', function (e) {
+                    e.preventDefault();
+                });
             });
-        });
-        validateUserInformation();
-        submitFeedback();
-        submitDocument();
-        submitPreinscriptionCandidated();
-        ( async function(){return selectCount(store.getState()) > 0 ? await ablesAddingFormationIntoTable(formationCandidaureID) : ''})();
-        (function(){return selectCount(store.getState()) >= 5 ? disablesAddingFormationButton() : ''})();
-        candidateBtn();
+            validateUserInformation();
+            submitFeedback();
+            submitDocument();
+            submitPreinscriptionCandidated();
+            ( async function(){return selectCount(store.getState()) > 0 ? await ablesAddingFormationIntoTable(formationCandidaureID) : ''})();
+            (function(){return selectCount(store.getState()) >= 5 ? disablesAddingFormationButton() : ''})();
+            candidateBtn();
+        }
     }
 }
 

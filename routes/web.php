@@ -49,7 +49,7 @@ Route::post('submit-feedback/{user}', function ($user ,App\Models\feedback $feed
 
 Route::post('upload-document/{user}', 'App\Http\Controllers\DocumentController@upload');
 
-Route::get('/documents/{user}/download', 'App\Http\Controllers\DocumentController@download');
+Route::get('documents-download/{user}', 'App\Http\Controllers\DocumentController@download');
 
 Route::get('get-list-formation/', function () {
     $records = formations::select(
@@ -177,5 +177,29 @@ Route::put('validate-candidature/{user}', function ($user, App\Http\Requests\Mak
         return response()->json(['error'=> 'Model not found']);
     }
 });
+
+Route::get('preinscriptions-list/', function () {
+    $data = DB::table('statut_preinscriptions')
+    ->join('preinscriptions', 'statut_preinscriptions.preinscription', '=', 'preinscriptions.id')
+    ->join('formations', 'formations.id', '=', 'preinscriptions.formation')
+    ->select('statut_preinscriptions.*', 'preinscriptions.*', 'formations.id', 'statut_preinscriptions.id as statut_preinscriptions_id')
+    ->get();
+    return  response()->json($data, 200);
+});
+
+Route::put('confirme-preinscription/{preinscription}', function ($preinscriptionId, App\Http\Requests\MakePreincriptionStatutRequest $request) {
+    $statut_preinscription = \App\Models\statut_preinscription::find($preinscriptionId);
+    if ($statut_preinscription) {
+        $updateSuccess = $statut_preinscription->update($request->validated());
+        if ($updateSuccess) {
+            return response()->json(['success'=> true]);
+        } else {
+            return response()->json(['success'=> false]);
+        }
+    } else {
+        return response()->json(['success'=> false, 'message' => 'Preinscription status not found']);
+    }
+});
+
 
 
