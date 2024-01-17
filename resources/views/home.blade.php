@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="spinner-border position-absolute top-50 start-50" role="status" id="spinner">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+     <div class="container" id="home-blade-file" data-isAdmin="{{$is_admin}}">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

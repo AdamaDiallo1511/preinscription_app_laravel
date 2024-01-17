@@ -21,7 +21,7 @@ store.subscribe(() => {
 ////////////////////////////////////////////////////////////////////////////////////// Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////
 export async function getData() {
     const userID = $('#user-data-information').attr("data-userID")
-    const isAdmin = $('#app').attr("data-isAdmin")
+    const isAdmin = $('#home-blade-file').attr("data-isAdmin")
     if (isAdmin) {
         adminData()
     } else {

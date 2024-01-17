@@ -112,8 +112,8 @@ export async function adminData() {
             submitData(`confirme-preinscription/${el.statut_preinscriptions_id}`,data,'PUT').then(res => {
                 console.log(res)
                 if (res.success) {
-                    $(`accepter-preinscription-${el.preinscription}`).attr('disabled', 'disabled')
-                    $(`refuser-preinscription-${el.preinscription}`).attr('disabled', 'disabled')
+                    $(`#accepter-preinscription-${el.preinscription}`).attr('disabled', 'disabled')
+                    $(`#refuser-preinscription-${el.preinscription}`).attr('disabled', 'disabled')
                 } else {
                     throw new error (
                         'request abborted'

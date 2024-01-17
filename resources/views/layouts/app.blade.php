@@ -17,7 +17,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body class="vh-100">
-    <div id="app" class="vh-100" data-isAdmin="{{$is_admin}}">
+    <div id="app" class="vh-100" >
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -73,9 +73,6 @@
         </nav>
 
         <main class="py-4 vh-100 position-relative">
-            <div class="spinner-border position-absolute top-50 start-50" role="status" id="spinner">
-                <span class="visually-hidden">Loading...</span>
-              </div>
             @yield('content')
         </main>
     </div>
